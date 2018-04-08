@@ -8,11 +8,13 @@
 	$ch = curl_init('http://www.webcoachbd.com');
 
 
+
+
 ======================================================================================
 */
 	$ch = curl_init();
 
-	curl_setopt($ch, CURLOPT_URL, 'http://www.webcoachbd.com/php-basic/php-operators?showall=&start=2');
+	curl_setopt($ch, CURLOPT_URL, 'http://localhost/Hackalgo/DummySite/index.php');
 
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 
@@ -20,3 +22,4 @@
 
 	curl_close($ch);
 ?>
+
