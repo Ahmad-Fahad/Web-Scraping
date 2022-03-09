@@ -17,7 +17,7 @@ class News_Scraper:
 		self.__url = url
 		self.__wlog = wlog
 
-	def retrieve_web_page(self):
+	def retrieve_webpage(self):
 		try:
 			html = urlopen(self.__url)
 		except Exception as e:
@@ -32,6 +32,7 @@ class News_Scraper:
 		try:
 			with open(file_path, 'wb') as f_obj:
 				if data:
+					#data = b+""+data
 					f_obj.write(data)
 				else:
 					f_obj.write(self.__data)
@@ -56,3 +57,30 @@ class News_Scraper:
 
 	def convert_data_to_bs4(self):
 		self.__soup = BeautifulSoup(self.__data, "html.parser")
+
+	def parse_soup_to_html(self):
+		news_list = self.__soup.find_all(['h1', 'h2', 'h3', 'h4'])
+
+		html_text = '''
+
+		<html>
+			<head><title>News Link Scraper</title></head>
+			<body>
+				{NEWS_LINKS}
+			</body>
+		</html>
+		'''
+
+		news_links = '<ol>'
+
+		for tag in news_list:
+			if tag.parent.get('href'):
+				link = self.__url + tag.parent.get('href')
+				title = tag.string
+				news_links += "<li><a href='{}' target='_blank'>{}</li>\n".format(link, title)
+		news_links += "</ol>"
+		
+		html_text = html_text.format(NEWS_LINKS=news_links)
+
+		self.write_webpage_as_html(file_path='html/news.html', data=html_text.encode)		
+
